@@ -1,4 +1,4 @@
-import { DipItem } from "./DipItem";
+import { DipItem } from "../components/DipItem";
 import "./Dips.scss";
 
 export const Dips = ({ menu, isLoading, setCartItems }) => {
@@ -18,7 +18,7 @@ export const Dips = ({ menu, isLoading, setCartItems }) => {
 					<p>Loading menu...</p>
 				) : (
 					menu
-						.slice(5, 11)
+						.slice(6, 11)
 						.map((item) => <DipItem key={item.id} name={item.name} />)
 				)}
 			</div>

@@ -1,9 +1,7 @@
 import { MenuItem } from "./MenuItem";
-import { Dips } from "./Dips";
-import { Drinks } from "./Drinks";
+import { DipItem } from "./DipItem";
+import { DrinkItem } from "./DrinkItem";
 import "./Menu.scss";
-
-import { menuData } from "../data/menuData";
 
 export const Menu = ({ menuItems, isLoading, setCartItems }) => {
 	return (
@@ -26,21 +24,59 @@ export const Menu = ({ menuItems, isLoading, setCartItems }) => {
 					))
 			)}
 
-			{/* <MenuItem descIsVisible={true} />
-			<MenuItem descIsVisible={true} />
-			<MenuItem descIsVisible={true} />
-			<MenuItem descIsVisible={true} />
-			<MenuItem descIsVisible={true} /> */}
-			<Dips
-				menu={menuItems}
-				isLoading={isLoading}
-				setCartItems={setCartItems}
-			/>
-			<Drinks
-				menu={menuItems}
-				isLoading={isLoading}
-				setCartItems={setCartItems}
-			/>
+			{
+				<div className="dipsArea">
+					<div className="dipItemMain">
+						<h3 className="dipTitle">Dipsås</h3>
+						<div className="dots"></div>
+						<h3 className="dipPrice">19 SEK</h3>
+					</div>
+				</div>
+			}
+
+			<div className="dipItemsArea">
+				{isLoading ? (
+					<p>Loading menu...</p>
+				) : (
+					menuItems
+						.slice(5, 11)
+						.map((item) => (
+							<DipItem
+								key={item.id}
+								name={item.name}
+								price={item.price}
+								setCartItems={setCartItems}
+							/>
+						))
+				)}
+			</div>
+
+			{
+				<div className="drinksArea">
+					<div className="drinkItemMain">
+						<h3 className="drinkTitle">Drickor</h3>
+						<div className="dots"></div>
+						<h3 className="drinkPrice">19 SEK</h3>
+					</div>
+				</div>
+			}
+
+			<div className="drinkItemsArea">
+				{isLoading ? (
+					<p>Loading menu...</p>
+				) : (
+					menuItems
+						.slice(11, 17)
+						.map((item) => (
+							<DrinkItem
+								key={item.id}
+								name={item.name}
+								price={item.price}
+								setCartItems={setCartItems}
+							/>
+						))
+				)}
+			</div>
 		</div>
 	);
 };

@@ -17,7 +17,7 @@ export const MenuItem = ({
 			<div className="menuItemMain">
 				<h3 className="itemName">{name}</h3>
 				<div className="dots"></div>
-				<h3 className="itemPrice">{price}</h3>
+				<h3 className="itemPrice">{price} SEK</h3>
 			</div>
 			{descIsVisible && (ingredients ? <p>{ingredients.join(", ")}</p> : "")}
 		</div>

@@ -1,4 +1,4 @@
-import { DrinkItem } from "./DrinkItem";
+import { DrinkItem } from "../components/DrinkItem";
 import "./Drinks.scss";
 
 export const Drinks = ({ menu, isLoading }) => {
