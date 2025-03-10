@@ -1,0 +1,61 @@
+@use '../styles/main.scss' as *;
+
+.orderModalPage {
+  background-color: $secondary-color;
+  @include page-layout;
+  position: fixed;
+}
+
+.orderedMenu {
+  @include page-layout;
+  border-top: 2px dotted darken($secondary-color, 20%);
+  margin: $padding-md;
+  gap: 0;
+  overflow: scroll;
+  width: auto;
+
+  .cartItem {
+    display: flex;
+    padding-top: $padding-md;
+    
+
+    .cartItemTitle {
+      white-space: nowrap;
+    }
+
+    .dots {
+      margin: 0 1rem 0 1rem;
+      flex-grow: 1; 
+      text-align: center;
+      overflow: hidden;
+      white-space: nowrap; 
+      letter-spacing: 3px;
+      font-size: 1.2rem;
+      color: #999;
+  }
+  
+  .dots:after {
+  content: '...............................................';
+  display: block;
+    }
+  }
+
+}
+
+.cartItem:last-child {
+  padding-bottom: $padding-md;
+  border-bottom: 2px dotted darken($secondary-color, 20%);
+}
+
+
+.cartButtons {
+  display: flex;
+  flex-direction: column;
+  padding: $padding-md;
+  gap: $padding-sm;
+
+  .btn1 {
+    display: flex;
+    justify-content: space-between;
+  }
+}

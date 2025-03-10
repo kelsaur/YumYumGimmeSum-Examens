@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import "./styles/main.scss";
 import { MenuPage } from "./pages/MenuPage";
 import { EtaPage } from "./pages/EtaPage";
-import { OrderModal } from "./components/OrderModal";
 
 const App = () => {
 	const [apiKey, setApiKey] = useState(null);
@@ -47,7 +46,7 @@ const App = () => {
 		};
 		fetchMenu();
 	}, [apiKey]);
-	console.log(apiKey, menu);
+	// console.log(apiKey, menu);
 
 	return (
 		<BrowserRouter>

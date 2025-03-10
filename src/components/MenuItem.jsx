@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import "./MenuItem.scss";
 
 export const MenuItem = ({
@@ -9,7 +8,28 @@ export const MenuItem = ({
 	setCartItems,
 }) => {
 	const addToCart = () => {
-		setCartItems((prevCart) => [...prevCart, { name, price, ingredients }]);
+		setCartItems((prevCart) => {
+			const existingItem = prevCart.find((item) => item.name === name);
+
+			if (existingItem) {
+				return prevCart.map((item) =>
+					item.name === name
+						? {
+								...item,
+								quantity: item.quantity + 1,
+								totalPrice: (item.totalPrice || 0) + price,
+						  }
+						: item
+				);
+			} else {
+				return [
+					...prevCart,
+					{ name, price, ingredients, quantity: 1, totalPrice: price },
+				];
+			}
+
+			// setCartItems((prevCart) => [...prevCart, { name, price, ingredients }]);
+		});
 	};
 
 	return (
