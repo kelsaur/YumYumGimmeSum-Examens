@@ -1,0 +1,7 @@
+@use '../styles/main.scss' as *;
+
+.appNav {
+  display: flex;
+  justify-content: space-between;
+  padding: $padding-md;
+}

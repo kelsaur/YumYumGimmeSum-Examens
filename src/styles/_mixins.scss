@@ -1,0 +1,34 @@
+@use './variables' as *;
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin page-layout {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: $padding-sm;
+}
+
+
+
+@mixin button-style($bg-color: $primary-color, $text-color: $secondary-color) {
+  background-color: $bg-color;
+  color: $text-color;
+  padding: $padding-md;
+  border-radius: 0.25rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.4s;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    background-color: darken($bg-color, 30%);
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+

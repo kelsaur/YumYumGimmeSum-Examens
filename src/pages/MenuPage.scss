@@ -1,0 +1,8 @@
+@use '../styles/main.scss' as *;
+
+.menuPage {
+  background-color: $green;
+  background-image: url('../assets/bgimg.png');
+  @include page-layout;
+}
+

@@ -1,0 +1,13 @@
+@use '../styles/main.scss' as *;
+
+.dipItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-block: $padding-sm;
+
+  .btn1 {
+    padding: $padding-sm;
+    font-size: $font-xs;
+  }
+}

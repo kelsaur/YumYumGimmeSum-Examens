@@ -1,0 +1,16 @@
+@use '../styles/main.scss' as *;
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: $primary-color;
+  color: $secondary-color;
+  margin: $padding-md;
+  overflow: scroll;
+
+  h1 {
+    padding: $padding-md;
+    border-bottom: 2px dotted darken($secondary-color, 50%);
+  }
+}

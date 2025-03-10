@@ -1,0 +1,13 @@
+@use '../styles/main.scss' as *;
+
+
+.etaTime {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color:$secondary-color;
+
+ img {
+  width: 24rem;
+ }
+}

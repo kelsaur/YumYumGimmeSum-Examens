@@ -1,0 +1,49 @@
+@use '../styles/main.scss' as *;
+
+.drinksArea {
+  display: flex;
+  flex-direction: column;
+
+  h3{
+    padding: $padding-md;
+    padding-bottom: 0;
+  }
+
+  .drinks {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-inline: $padding-md;
+    padding-bottom: $padding-md;
+    column-gap: 1rem;
+  }
+
+  .drinkItemMain {
+    display: flex;
+    width: 100%;
+    align-items: center;
+
+    h3 {
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .dots {
+      margin: 0 1rem 0 1rem;
+      flex-grow: 1; /* ✅ Makes dots fill available space */
+      text-align: center;
+      overflow: hidden; /* ✅ Ensures it stays inside */
+      white-space: nowrap; /* ✅ Prevents wrapping */
+      letter-spacing: 3px; /* ✅ Adjusts spacing between dots */
+      font-size: 1.2rem;
+      color: #999;
+}
+
+.dots:after {
+  content: '...............................................';
+  display: block;
+    }
+  }
+}
+

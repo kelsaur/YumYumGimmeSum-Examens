@@ -1,0 +1,35 @@
+@use '../styles/main.scss' as *;
+
+.menuItem {
+  display: flex;
+  flex-direction: column;
+  padding: $padding-md;
+  border-bottom: 2px dotted darken($secondary-color, 50%);
+
+  .menuItemMain {
+    display: flex;
+    width: 100%;
+    align-items: center;
+
+    h3 {
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .dots {
+      margin: 0 1rem 0 1rem;
+      flex-grow: 1; /* ✅ Makes dots fill available space */
+      text-align: center;
+      overflow: hidden; /* ✅ Ensures it stays inside */
+      white-space: nowrap; /* ✅ Prevents wrapping */
+      letter-spacing: 3px; /* ✅ Adjusts spacing between dots */
+      font-size: 1.2rem;
+      color: #999;
+}
+
+.dots:after {
+  content: '...............................................';
+  display: block;
+    }
+  }
+}

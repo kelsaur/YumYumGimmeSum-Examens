@@ -1,0 +1,13 @@
+@use '../styles/main.scss' as *;
+
+
+.etaPage {
+  background-color: $primary-color;
+  @include page-layout;
+
+  .etaBtn {
+    @include page-layout;
+    justify-content: flex-end;
+    padding: $padding-md;
+    }
+}
