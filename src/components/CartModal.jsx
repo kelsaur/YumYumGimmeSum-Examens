@@ -2,10 +2,42 @@ import "./CartModal.scss";
 import { AppNav } from "./AppNav";
 import { Button } from "./Button";
 import "../components/Button.scss";
-import { MenuItem } from "./MenuItem";
 
-export const CartModal = ({ setCartIsOpen, cartItems }) => {
-	const totalPrice = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
+export const CartModal = ({ setCartIsOpen, cartItems, setCartItems }) => {
+	const totalPrice = cartItems.reduce(
+		(sum, item) => sum + (item.totalPrice || item.price),
+		0
+	);
+
+	const itemRemove = (itemName) => {
+		setCartItems((prevCart) =>
+			prevCart
+				.map((item) =>
+					item.name === itemName
+						? {
+								...item,
+								quantity: item.quantity - 1,
+								totalPrice: item.totalPrice - item.price,
+						  }
+						: item
+				)
+				.filter((item) => item.quantity > 0)
+		);
+	};
+
+	const itemAdd = (itemName) => {
+		setCartItems((prevCart) =>
+			prevCart.map((item) =>
+				item.name === itemName
+					? {
+							...item,
+							quantity: item.quantity + 1,
+							totalPrice: item.totalPrice + item.price,
+					  }
+					: item
+			)
+		);
+	};
 
 	return (
 		<div className="orderModalPage">
@@ -17,6 +49,8 @@ export const CartModal = ({ setCartIsOpen, cartItems }) => {
 							<h3 className="cartItemTitle">{item.name}</h3>
 							<div className="dots"></div>
 							<h3 className="cartItemPrice">{item.totalPrice}</h3>
+							<p onClick={() => itemRemove(item.name)}>➖</p>
+							<p onClick={() => itemAdd(item.name)}>➕</p>
 						</div>
 					))
 				) : (

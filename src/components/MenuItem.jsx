@@ -22,6 +22,7 @@ export const MenuItem = ({
 						: item
 				);
 			} else {
+				//Create an object that becomes the cartItem if item doesn't already exist in cart
 				return [
 					...prevCart,
 					{ name, price, ingredients, quantity: 1, totalPrice: price },

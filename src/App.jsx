@@ -1,17 +1,37 @@
+import "./styles/main.scss";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
-import "./styles/main.scss";
+import { useDispatch } from "react-redux";
 import { MenuPage } from "./pages/MenuPage";
 import { EtaPage } from "./pages/EtaPage";
+import { fetchMenu } from "./redux/menuSlice";
 
 const App = () => {
+	const dispatch = useDispatch();
 	const [apiKey, setApiKey] = useState(null);
-	const [menu, setMenu] = useState({});
-	const [isLoading, setIsLoading] = useState(true);
 	const [cartIsOpen, setCartIsOpen] = useState(false);
 	const [cartItems, setCartItems] = useState([]);
 
 	const BASE_URL = "https://fdnzawlcf6.execute-api.eu-north-1.amazonaws.com";
+
+	// const registerTenant = async (apiKey) => {
+	// 	try {
+	// 		let response = await fetch(`${BASE_URL}/tenants`, {
+	// 			method: "POST",
+	// 			headers: { "x-zocom": apiKey },
+	// 			body: { name: "Hhh" },
+	// 		});
+	// 		if (!response.ok) {
+	// 			throw new Error("COuld not register tenant");
+	// 		}
+	// 		let data = await response.json();
+	// 		console.log("Tenant registred. Tenant ID: ", data.tenantId);
+
+	// 		return data.tenantId;
+	// 	} catch (error) {
+	// 		console.log("Error when registering: ", error);
+	// 	}
+	// };
 
 	useEffect(() => {
 		const getApiKey = async () => {
@@ -20,33 +40,17 @@ const App = () => {
 				const keyData = await keyRes.json();
 				setApiKey(keyData.key);
 			} catch (error) {
-				alert("There was an error loading API key");
+				console.log("There was an error loading API key");
 			}
 		};
 		getApiKey();
 	}, []);
 
 	useEffect(() => {
-		if (!apiKey) return;
-
-		const fetchMenu = async () => {
-			try {
-				let res = await fetch(`${BASE_URL}/menu`, {
-					method: "GET",
-					headers: { "x-zocom": apiKey },
-				});
-
-				const data = await res.json();
-				setMenu(data.items);
-			} catch (error) {
-				alert("There was an error fetching menu");
-			} finally {
-				setIsLoading(false);
-			}
-		};
-		fetchMenu();
-	}, [apiKey]);
-	// console.log(apiKey, menu);
+		if (apiKey) {
+			dispatch(fetchMenu(apiKey)); //Fetch meny when API key is rdy
+		}
+	}, [apiKey, dispatch]);
 
 	return (
 		<BrowserRouter>
@@ -55,8 +59,7 @@ const App = () => {
 					path="/"
 					element={
 						<MenuPage
-							menu={menu}
-							isLoading={isLoading}
+							apiKey={apiKey}
 							cartIsOpen={cartIsOpen}
 							setCartIsOpen={setCartIsOpen}
 							cartItems={cartItems}
