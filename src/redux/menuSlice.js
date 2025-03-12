@@ -5,7 +5,7 @@ export const fetchMenu = createAsyncThunk("menu/fetchMenu", async (apiKey) => {
 
   const response = await fetch(`${BASE_URL}/menu`, {
       method: "GET",
-      headers: { "x-zocom": apiKey },
+      headers: { "x-zocom": apiKey},
   })
   
   if(!response.ok) {
@@ -35,10 +35,11 @@ const menuSlice = createSlice({
       state.status = "loading"
     })
     .addCase(fetchMenu.fulfilled, (state, action) => {
+      console.log(action.payload)
       state.status = "succeeded"
       state.items = action.payload; //updates STORE.MENU.ITEMS
     })
-    .addCase(fetchMenu.rejected, (state) => {
+    .addCase(fetchMenu.rejected, (state, action) => {
       state.status = "failed"
       state.error = action.error.message
     })

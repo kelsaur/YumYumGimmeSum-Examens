@@ -15,6 +15,7 @@ export const Menu = ({ menuItems, isLoading, setCartItems }) => {
 					.map((item) => (
 						<MenuItem
 							key={item.id}
+							id={item.id}
 							name={item.name}
 							price={item.price}
 							ingredients={item.ingredients}
@@ -43,6 +44,7 @@ export const Menu = ({ menuItems, isLoading, setCartItems }) => {
 						.map((item) => (
 							<DipItem
 								key={item.id}
+								id={item.id}
 								name={item.name}
 								price={item.price}
 								setCartItems={setCartItems}
@@ -70,6 +72,7 @@ export const Menu = ({ menuItems, isLoading, setCartItems }) => {
 						.map((item) => (
 							<DrinkItem
 								key={item.id}
+								id={item.id}
 								name={item.name}
 								price={item.price}
 								setCartItems={setCartItems}

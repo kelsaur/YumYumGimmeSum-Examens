@@ -2,42 +2,54 @@ import "./CartModal.scss";
 import { AppNav } from "./AppNav";
 import { Button } from "./Button";
 import "../components/Button.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { removeItem, addItem } from "../redux/cartSlice";
+import { useNavigate } from "react-router-dom";
 
-export const CartModal = ({ setCartIsOpen, cartItems, setCartItems }) => {
-	const totalPrice = cartItems.reduce(
-		(sum, item) => sum + (item.totalPrice || item.price),
-		0
-	);
+export const CartModal = ({ setCartIsOpen }) => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const cartItems = useSelector((state) => state.cart.items);
+	const totalPrice = useSelector((state) => state.cart.totalPrice);
+	console.log("Cart state in CartModal:", cartItems);
+	// const { apiKey } = useSelector((state) => state.api);
+	// const { status } = useSelector((state) => state.order);
 
-	const itemRemove = (itemName) => {
-		setCartItems((prevCart) =>
-			prevCart
-				.map((item) =>
-					item.name === itemName
-						? {
-								...item,
-								quantity: item.quantity - 1,
-								totalPrice: item.totalPrice - item.price,
-						  }
-						: item
-				)
-				.filter((item) => item.quantity > 0)
-		);
-	};
+	// dispatch();
+	// const totalPrice = cartItems.reduce(
+	// 	(sum, item) => sum + (item.totalPrice || item.price),
+	// 	0
+	// );
 
-	const itemAdd = (itemName) => {
-		setCartItems((prevCart) =>
-			prevCart.map((item) =>
-				item.name === itemName
-					? {
-							...item,
-							quantity: item.quantity + 1,
-							totalPrice: item.totalPrice + item.price,
-					  }
-					: item
-			)
-		);
-	};
+	// const itemRemove = (itemName) => {
+	// 	setCartItems((prevCart) =>
+	// 		prevCart
+	// 			.map((item) =>
+	// 				item.name === itemName
+	// 					? {
+	// 							...item,
+	// 							quantity: item.quantity - 1,
+	// 							totalPrice: item.totalPrice - item.price,
+	// 					  }
+	// 					: item
+	// 			)
+	// 			.filter((item) => item.quantity > 0)
+	// 	);
+	// };
+
+	// const itemAdd = (itemName) => {
+	// 	setCartItems((prevCart) =>
+	// 		prevCart.map((item) =>
+	// 			item.name === itemName
+	// 				? {
+	// 						...item,
+	// 						quantity: item.quantity + 1,
+	// 						totalPrice: item.totalPrice + item.price,
+	// 				  }
+	// 				: item
+	// 		)
+	// 	);
+	// };
 
 	return (
 		<div className="orderModalPage">
@@ -49,8 +61,16 @@ export const CartModal = ({ setCartIsOpen, cartItems, setCartItems }) => {
 							<h3 className="cartItemTitle">{item.name}</h3>
 							<div className="dots"></div>
 							<h3 className="cartItemPrice">{item.totalPrice}</h3>
-							<p onClick={() => itemRemove(item.name)}>➖</p>
-							<p onClick={() => itemAdd(item.name)}>➕</p>
+							<p onClick={() => dispatch(removeItem({ id: item.id }))}>➖</p>
+							<p
+								onClick={() =>
+									dispatch(
+										addItem({ id: item.id, name: item.name, price: item.price })
+									)
+								}
+							>
+								➕
+							</p>
 						</div>
 					))
 				) : (

@@ -1,14 +1,18 @@
 import "./styles/main.scss";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MenuPage } from "./pages/MenuPage";
 import { EtaPage } from "./pages/EtaPage";
+import { fetchApiKey } from "./redux/apiSlice";
 import { fetchMenu } from "./redux/menuSlice";
+import { registerTenant } from "./redux/tenantSlice";
 
 const App = () => {
 	const dispatch = useDispatch();
-	const [apiKey, setApiKey] = useState(null);
+	const { apiKey, status: apiStatus } = useSelector((state) => state.api);
+	const { status: tenantStatus } = useSelector((state) => state.tenant);
+	// const [apiKey, setApiKey] = useState(null);
 	const [cartIsOpen, setCartIsOpen] = useState(false);
 	const [cartItems, setCartItems] = useState([]);
 
@@ -34,17 +38,22 @@ const App = () => {
 	// };
 
 	useEffect(() => {
-		const getApiKey = async () => {
-			try {
-				const keyRes = await fetch(`${BASE_URL}/keys`, { method: "POST" });
-				const keyData = await keyRes.json();
-				setApiKey(keyData.key);
-			} catch (error) {
-				console.log("There was an error loading API key");
-			}
-		};
-		getApiKey();
-	}, []);
+		if (!apiKey && apiStatus === "idle") {
+			//Only fetch when status is idle to prevent reftching on every render
+			dispatch(fetchApiKey());
+		}
+	}, [apiKey, apiStatus, dispatch]);
+
+	useEffect(() => {
+		const storedTenant = localStorage.getItem("tenantId");
+
+		if (apiKey && !storedTenant && tenantStatus === "idle") {
+			console.log("Registering tenant...");
+			dispatch(registerTenant({ apiKey }));
+		} else if (storedTenant) {
+			//console.log("Tenant already exist: ", tenantId);
+		}
+	}, [apiKey, tenantStatus, dispatch]);
 
 	useEffect(() => {
 		if (apiKey) {
