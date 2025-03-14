@@ -1,6 +1,22 @@
+.cartIcon-container {
+  position: relative;
+}
+
 img {
   width: 4rem;
   margin-left: auto;
+}
 
-  
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 50%;
+  min-width: 20px;
+  text-align: center;
 }

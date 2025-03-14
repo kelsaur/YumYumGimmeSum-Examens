@@ -5,9 +5,26 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   color:$secondary-color;
 
  img {
   width: 24rem;
+ }
+
+h2 {
+  font-size: $font-xxl;
+  font-family: $font-primary;
+}
+
+h3 {
+font-size: $font-xl;
+font-family: $font-primary;
+}
+
+ p{
+  text-transform: uppercase;
+  font-size: $font-sm;
+  font-family: $font-primary;
  }
 }

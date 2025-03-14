@@ -1,65 +1,66 @@
 import "./styles/main.scss";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { MenuPage } from "./pages/MenuPage";
 import { EtaPage } from "./pages/EtaPage";
-import { fetchApiKey } from "./redux/apiSlice";
-import { fetchMenu } from "./redux/menuSlice";
-import { registerTenant } from "./redux/tenantSlice";
+import { fetchApiKey, fetchMenu, fetchTenantId } from "./api";
 
 const App = () => {
-	const dispatch = useDispatch();
-	const { apiKey, status: apiStatus } = useSelector((state) => state.api);
-	const { status: tenantStatus } = useSelector((state) => state.tenant);
-	// const [apiKey, setApiKey] = useState(null);
+	const [apiKey, setApiKey] = useState(null);
+	const [tenantId, setTenantId] = useState(
+		localStorage.getItem("tenantId") || null
+	);
+	const [menuItems, setMenuItems] = useState([]);
 	const [cartIsOpen, setCartIsOpen] = useState(false);
-	const [cartItems, setCartItems] = useState([]);
-
-	const BASE_URL = "https://fdnzawlcf6.execute-api.eu-north-1.amazonaws.com";
-
-	// const registerTenant = async (apiKey) => {
-	// 	try {
-	// 		let response = await fetch(`${BASE_URL}/tenants`, {
-	// 			method: "POST",
-	// 			headers: { "x-zocom": apiKey },
-	// 			body: { name: "Hhh" },
-	// 		});
-	// 		if (!response.ok) {
-	// 			throw new Error("COuld not register tenant");
-	// 		}
-	// 		let data = await response.json();
-	// 		console.log("Tenant registred. Tenant ID: ", data.tenantId);
-
-	// 		return data.tenantId;
-	// 	} catch (error) {
-	// 		console.log("Error when registering: ", error);
-	// 	}
-	// };
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		if (!apiKey && apiStatus === "idle") {
-			//Only fetch when status is idle to prevent reftching on every render
-			dispatch(fetchApiKey());
+		const getApiKey = async () => {
+			try {
+				const data = await fetchApiKey();
+				setApiKey(data.key);
+				//console.log("Api key has been fetched: ", data.key);
+			} catch (err) {
+				console.log("Error fetching API key: ", err);
+			}
+		};
+
+		if (!apiKey) {
+			getApiKey();
 		}
-	}, [apiKey, apiStatus, dispatch]);
+	}, []);
 
 	useEffect(() => {
-		const storedTenant = localStorage.getItem("tenantId");
+		const getTenant = async () => {
+			if (apiKey && !tenantId) {
+				console.log("Checking for tenant id..");
+				const id = await fetchTenantId(apiKey);
+				if (id) {
+					setTenantId(id);
+					console.log("Stored tenant ID: ", id);
+				}
+			}
+		};
 
-		if (apiKey && !storedTenant && tenantStatus === "idle") {
-			console.log("Registering tenant...");
-			dispatch(registerTenant({ apiKey }));
-		} else if (storedTenant) {
-			//console.log("Tenant already exist: ", tenantId);
-		}
-	}, [apiKey, tenantStatus, dispatch]);
+		getTenant();
+	}, [apiKey, tenantId]);
 
 	useEffect(() => {
-		if (apiKey) {
-			dispatch(fetchMenu(apiKey)); //Fetch meny when API key is rdy
-		}
-	}, [apiKey, dispatch]);
+		const getMenu = async () => {
+			if (apiKey) {
+				try {
+					const data = await fetchMenu(apiKey);
+					setMenuItems(data.items);
+					setLoading(false);
+					//console.log("Menu fetched: ", data.items);
+				} catch (err) {
+					console.error("Error fetching menu: ", err);
+					setError("Failed to fetch menu");
+				}
+			}
+		};
+		getMenu();
+	}, [apiKey]);
 
 	return (
 		<BrowserRouter>
@@ -69,18 +70,19 @@ const App = () => {
 					element={
 						<MenuPage
 							apiKey={apiKey}
+							tenantId={tenantId}
+							menuItems={menuItems}
+							isLoading={loading}
 							cartIsOpen={cartIsOpen}
 							setCartIsOpen={setCartIsOpen}
-							cartItems={cartItems}
-							setCartItems={setCartItems}
 						/>
 					}
 				/>
 				<Route
 					path="eta"
-					element={<EtaPage />}
-					isCartOpen={cartIsOpen}
-					setCartIsOpen={setCartIsOpen}
+					element={
+						<EtaPage cartIsOpen={cartIsOpen} setCartIsOpen={setCartIsOpen} />
+					}
 				/>
 				{/* <Route path="ordermodal" element={<OrderModal />} /> */}
 			</Routes>

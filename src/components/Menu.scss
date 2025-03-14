@@ -10,8 +10,11 @@
   overflow: scroll;
 
   h1 {
-    padding: $padding-md;
+    padding: $padding-lg;
+    padding-left: $padding-md;
     border-bottom: 2px dotted darken($secondary-color, 50%);
+    font-size: $font-xxl;
+    font-family: $font-primary;
   }
 }
 

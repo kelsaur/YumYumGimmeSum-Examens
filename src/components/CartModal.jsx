@@ -1,55 +1,54 @@
 import "./CartModal.scss";
+import "../components/Button.scss";
 import { AppNav } from "./AppNav";
 import { Button } from "./Button";
-import "../components/Button.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { removeItem, addItem } from "../redux/cartSlice";
+import { removeItem, addItem, setOrderInfo } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
+import { fetchOrderInfo } from "../api";
 
-export const CartModal = ({ setCartIsOpen }) => {
+export const CartModal = ({ setCartIsOpen, apiKey, tenantId }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const cartItems = useSelector((state) => state.cart.items);
 	const totalPrice = useSelector((state) => state.cart.totalPrice);
-	console.log("Cart state in CartModal:", cartItems);
-	// const { apiKey } = useSelector((state) => state.api);
-	// const { status } = useSelector((state) => state.order);
+	//console.log("Cart state in CartModal: ", cartItems); //doesn't take quantity into account!!
 
-	// dispatch();
-	// const totalPrice = cartItems.reduce(
-	// 	(sum, item) => sum + (item.totalPrice || item.price),
-	// 	0
-	// );
+	const handleCheckout = async () => {
+		if (tenantId && !apiKey && cartItems.length === 0) {
+			//console.log("Missing tenantId, apiKey, or cart is empty!");
+			return;
+		}
 
-	// const itemRemove = (itemName) => {
-	// 	setCartItems((prevCart) =>
-	// 		prevCart
-	// 			.map((item) =>
-	// 				item.name === itemName
-	// 					? {
-	// 							...item,
-	// 							quantity: item.quantity - 1,
-	// 							totalPrice: item.totalPrice - item.price,
-	// 					  }
-	// 					: item
-	// 			)
-	// 			.filter((item) => item.quantity > 0)
-	// 	);
-	// };
+		//Send array of id's, not cartItems from Redux
+		const itemIds = cartItems.flatMap((item) =>
+			Array(item.quantity).fill(item.id)
+		);
+		//console.log("Sending order for items:", itemIds);
 
-	// const itemAdd = (itemName) => {
-	// 	setCartItems((prevCart) =>
-	// 		prevCart.map((item) =>
-	// 			item.name === itemName
-	// 				? {
-	// 						...item,
-	// 						quantity: item.quantity + 1,
-	// 						totalPrice: item.totalPrice + item.price,
-	// 				  }
-	// 				: item
-	// 		)
-	// 	);
-	// };
+		try {
+			// console.log("tenantId:", tenantId);
+			// console.log("apiKey:", apiKey);
+
+			const orderInfo = await fetchOrderInfo(tenantId, apiKey, itemIds);
+			// console.log(
+			// 	"Order confirmed: ",
+			// 	orderInfo,
+			// 	orderInfo.order.eta,
+			// 	orderInfo.order.id
+			// );
+			dispatch(
+				setOrderInfo({
+					eta: orderInfo.order.eta,
+					orderId: orderInfo.order.id,
+					orderState: orderInfo.order.state,
+				})
+			);
+			navigate("/eta");
+		} catch (error) {
+			console.log("Order failed: ", error);
+		}
+	};
 
 	return (
 		<div className="orderModalPage">
@@ -83,7 +82,9 @@ export const CartModal = ({ setCartIsOpen }) => {
 					<span className="btnPrice">{totalPrice}</span>
 				</Button>
 
-				<Button className="btn3">TAKE MY MONEY</Button>
+				<Button className="btn3" onClick={handleCheckout}>
+					TAKE MY MONEY
+				</Button>
 			</div>
 		</div>
 	);

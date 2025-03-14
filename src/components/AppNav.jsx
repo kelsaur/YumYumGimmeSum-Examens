@@ -1,7 +1,6 @@
 import { Logo } from "./Logo";
 import { CartIcon } from "./CartIcon";
 import "./AppNav.scss";
-import { useState } from "react";
 
 export const AppNav = ({ showLogo, showCart, setCartIsOpen }) => {
 	// const handleCartClick = () => setCartIsOpen(true);

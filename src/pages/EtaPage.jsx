@@ -1,33 +1,29 @@
+import "./EtaPage.scss";
 import { AppNav } from "../components/AppNav";
 import { EtaTime } from "../components/EtaTime";
 import { Button } from "../components/Button";
-import "./EtaPage.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { clearCart } from "../redux/cartSlice";
 
-export const EtaPage = () => {
+export const EtaPage = ({ setCartIsOpen }) => {
 	const dispatch = useDispatch();
-	const { tenantId } = useSelector((state) => state.tenant);
-	const { apiKey } = useSelector((state) => state.api);
-	const { eta, orderId, orderValue, status, error } = useSelector(
-		(state) => state.order
-	);
+	const navigate = useNavigate();
 
-	useEffect(() => {
-		if (tenantId && apiKey) {
-			dispatch(fetchOrders({ tenantId, apiKey }));
-		}
-	}, [tenantId, apiKey, dispatch]);
-
-	if (status === "loading") return <p>Fetching order status...</p>;
-	if (status === "failed") return <p>Error: {error}</p>;
+	const handleNewOrder = () => {
+		setCartIsOpen(false);
+		dispatch(clearCart());
+		navigate("/");
+	};
 
 	return (
 		<div className="etaPage">
-			<AppNav showLogo={true} showCart={false} />
-			<EtaTime eta={eta} orderId={orderId} />
+			<AppNav showLogo={true} showCart={false} setCartIsOpen={setCartIsOpen} />
+			<EtaTime />
 			<div className="etaBtn">
-				<Button className="btn1">GÖR EN NY BESTÄLLNING</Button>
+				<Button className="btn1" onClick={handleNewOrder}>
+					GÖR EN NY BESTÄLLNING
+				</Button>
 				<Button className="btn3">SE KVITTO</Button>
 			</div>
 		</div>

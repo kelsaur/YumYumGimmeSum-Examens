@@ -1,14 +1,14 @@
+import "./Menu.scss";
 import { MenuItem } from "./MenuItem";
 import { DipItem } from "./DipItem";
 import { DrinkItem } from "./DrinkItem";
-import "./Menu.scss";
 
-export const Menu = ({ menuItems, isLoading, setCartItems }) => {
+export const Menu = ({ menuItems, isLoading }) => {
 	return (
 		<div className="menu">
 			<h1>Meny</h1>
 			{isLoading ? (
-				<p>Loading menu...</p>
+				<p>Menyn laddas...</p>
 			) : (
 				menuItems
 					.slice(0, 5)
@@ -19,8 +19,6 @@ export const Menu = ({ menuItems, isLoading, setCartItems }) => {
 							name={item.name}
 							price={item.price}
 							ingredients={item.ingredients}
-							descIsVisible={true}
-							setCartItems={setCartItems}
 						/>
 					))
 			)}
@@ -47,7 +45,6 @@ export const Menu = ({ menuItems, isLoading, setCartItems }) => {
 								id={item.id}
 								name={item.name}
 								price={item.price}
-								setCartItems={setCartItems}
 							/>
 						))
 				)}
@@ -75,7 +72,6 @@ export const Menu = ({ menuItems, isLoading, setCartItems }) => {
 								id={item.id}
 								name={item.name}
 								price={item.price}
-								setCartItems={setCartItems}
 							/>
 						))
 				)}
