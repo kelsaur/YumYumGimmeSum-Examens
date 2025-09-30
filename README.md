@@ -20,5 +20,5 @@ A React-based frontend web app for the fictional foodtruck **Yum Yum Gimme Sum**
 
 ## Preview
 
-**<a href="https://vimeo.com/1065910807/f214fe1f12?share=copy">Code presentation</a>**
+**<a href="https://vimeo.com/1065910807/f214fe1f12?share=copy">Code presentation</a>**<br/>
 <img src="./public/screen.png" />
